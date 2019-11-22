@@ -1,19 +1,20 @@
-
+let locationsInfo = [];
 
 const getLocations = () => {
-    fetch('electricCharger.json')
+    fetch('https://cors-anywhere.herokuapp.com/api-electric-charger.herokuapp.com/electricCharger')
         .then(response => response.json())
         .then(locations => {
-            let locationsInfo = [];
+            // let locationsInfo = [];
 
             locations.forEach(location => {
                 let locationData = {
+                    id:location.id,
                     position:{lat:Number(location.geolocation.latitude),
                               lng:Number(location.geolocation.longitude)},
                     name:location.name,
-                //     cargador:location.plug_type,
-                //     costo:location.kw_price,
-                //     estatus: location.state,
+                    cargador:location.plug_type,
+                    costo:location.kw_price,
+                    estatus: location.state,
                 };
                 locationsInfo.push(locationData)
             });
