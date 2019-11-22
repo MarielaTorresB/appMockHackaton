@@ -1,4 +1,8 @@
 let locationsInfo = [];
+let markers;
+let filtered=[];
+let map;
+let marker;
 
 const getLocations = () => {
     fetch('https://cors-anywhere.herokuapp.com/api-electric-charger.herokuapp.com/electricCharger')
@@ -33,18 +37,18 @@ const getLocations = () => {
 };
 
 const dibujarMapa = (obj, locationsInfo) => {
-    let map = new google.maps.Map(document.getElementById('map'),{
+    map = new google.maps.Map(document.getElementById('map'),{
         zoom: 4,
         center: obj
     });
 
-    let marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
         position: obj,
         title: 'Tu ubicacion'
     });
     marker.setMap(map);
 
-    let markers = locationsInfo.map(place => {
+    markers = locationsInfo.map(place => {
         return new google.maps.Marker({
             position: place.position,
             map: map,
@@ -55,6 +59,36 @@ const dibujarMapa = (obj, locationsInfo) => {
             // icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
         })
     })
+
+};
+
+let filterLocations= (criterio) => {
+    let criterion= criterio;
+    console.log(criterion);
+    filtered=locationsInfo.filter(location => location.cargador === criterion);
+    console.log(filtered);
+
+    // if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((data)=>{
+            let currentPosition = {
+                lat: data.coords.latitude,
+                lng: data.coords.longitude
+            };
+            dibujarMapa(currentPosition, filtered)
+        })
+    // }
+
+ /*   markers = filtered.map(place => {
+        return new google.maps.Marker({
+            position: place.position,
+            map: map,
+            title: place.name,
+            // title: place.cargador,
+            // title: place.costo,
+            // title: place.estatus
+            // icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+        })
+    }) */
 
 };
 
